@@ -1,0 +1,373 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "8F_xKlK9A_1l"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "class TicTacToe:#لعبه x,o\n",
+        "  def __init__(self):\n",
+        "    self.board = np.zeros((3,3))\n",
+        "  def reset(self):\n",
+        "    self.board = np.zeros((3,3))\n",
+        "  def available_actions(self):\n",
+        "      actions = []\n",
+        "      for i in range(3):\n",
+        "        for j in range(3):\n",
+        "          if self.board[i,j] == 0:\n",
+        "            actions.append((i,j))\n",
+        "      return actions\n",
+        "  def make_move(self, row,column, player):\n",
+        "    if self.board[row,column] == 0:\n",
+        "      self.board[row,column] = player\n",
+        "      return True\n",
+        "    else:\n",
+        "      return False\n",
+        "  def is_game_over(self):\n",
+        "    for i in range(3):\n",
+        "      if abs(np.sum(self.board[i,:])) == 3:\n",
+        "        return self.board[i, 0]\n",
+        "      if abs(np.sum(self.board[:,i])) == 3:\n",
+        "        return self.board[0, i]\n",
+        "\n",
+        "      diag1 = sum(self.board[i, i] for i in range(3))\n",
+        "      diag2 = sum(self.board[i, 2 - i] for i in range(3))\n",
+        "\n",
+        "      if abs(diag1) == 3:\n",
+        "        return self.board[0, 0]\n",
+        "\n",
+        "      if abs(diag2) == 3:\n",
+        "          return self.board[0, 2]\n",
+        "\n",
+        "      if len(self.available_actions()) == 0:\n",
+        "        return True\n",
+        "      else:\n",
+        "        return False\n",
+        "\n",
+        "  def print_board(self):\n",
+        "    symbols = {0: \".\", 1: \"X\", -1: \"O\"}\n",
+        "\n",
+        "    for row in self.board:\n",
+        "        print(\" \".join(symbols[int(cell)] for cell in row))\n",
+        "\n",
+        "    print()\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "test if the code run and zero error"
+      ],
+      "metadata": {
+        "id": "iR38v3HgJhb7"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "game = TicTacToe()\n",
+        "game.print_board()\n",
+        "\n",
+        "game.make_move(0,0,-1)\n",
+        "game.make_move(0,1,-1)\n",
+        "game.make_move(0,2,-1)\n",
+        "\n",
+        "game.print_board()\n",
+        "\n",
+        "print(\"Winner:\",game.is_game_over())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Fre8TX0dFY21",
+        "outputId": "b8541750-e9fe-4833-d6c1-062e6a236f74"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            ". . .\n",
+            ". . .\n",
+            ". . .\n",
+            "\n",
+            "O O O\n",
+            ". . .\n",
+            ". . .\n",
+            "\n",
+            "Winner: -1.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import random\n",
+        "class RandomPlayer:\n",
+        "  def chose_action(self, player):\n",
+        "    move=game.available_actions()\n",
+        "    return random.choice(move)"
+      ],
+      "metadata": {
+        "id": "6sWZs1-TGS6a"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "random player"
+      ],
+      "metadata": {
+        "id": "GlnChQgSJbFW"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "game = TicTacToe()\n",
+        "player = RandomPlayer()\n",
+        "\n",
+        "game.print_board()\n",
+        "\n",
+        "move=player.chose_action(game)\n",
+        "print(move)\n",
+        "\n",
+        "game.make_move(move[0],move[1],1)\n",
+        "\n",
+        "game.print_board()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ef9ZN3FzIvBx",
+        "outputId": "ce66cf2d-e601-4a66-b913-1a942e6e2ce5"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            ". . .\n",
+            ". . .\n",
+            ". . .\n",
+            "\n",
+            "(1, 0)\n",
+            ". . .\n",
+            "X . .\n",
+            ". . .\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import random\n",
+        "\n",
+        "class QLearningAgent:\n",
+        "    def __init__(self, alpha=0.1, gamma=0.9, epsilon=0.2):\n",
+        "        self.Q = {}  # Q-Tableذاكره ال Ai\n",
+        "        self.alpha = alpha  # Learning Rate\n",
+        "        self.gamma = gamma  # Discount Factor\n",
+        "        self.epsilon = epsilon  # Exploration\n",
+        "\n",
+        "    def get_state(self, game):\n",
+        "        return tuple(game.board.flatten())\n",
+        "\n",
+        "    def choose_action(self, game):\n",
+        "        state = self.get_state(game)\n",
+        "        moves = game.available_actions()\n",
+        "\n",
+        "        # Exploration\n",
+        "        if random.random() < self.epsilon:\n",
+        "            return random.choice(moves)\n",
+        "\n",
+        "        # Exploitation\n",
+        "        if state not in self.Q:\n",
+        "            self.Q[state] = {}\n",
+        "\n",
+        "        values = []\n",
+        "        for move in moves:\n",
+        "            values.append(self.Q[state].get(move, 0))\n",
+        "\n",
+        "        max_value = max(values)\n",
+        "\n",
+        "        best_moves = [move for move in moves if self.Q[state].get(move, 0) == max_value]\n",
+        "\n",
+        "        return random.choice(best_moves)\n",
+        "\n",
+        "    def update(self, state, action, reward, next_state):\n",
+        "        if state not in self.Q:\n",
+        "            self.Q[state] = {}\n",
+        "\n",
+        "        old_value = self.Q[state].get(action, 0)\n",
+        "\n",
+        "        next_max = 0\n",
+        "        if next_state in self.Q:\n",
+        "            next_max = max(self.Q[next_state].values(), default=0)\n",
+        "\n",
+        "        new_value = old_value + self.alpha * (\n",
+        "            reward + self.gamma * next_max - old_value\n",
+        "        )\n",
+        "\n",
+        "        self.Q[state][action] = new_value\n"
+      ],
+      "metadata": {
+        "id": "6b8lzRtTKk6A"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Train"
+      ],
+      "metadata": {
+        "id": "lrnzGq3nriCg"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def train(agent, episodes=5000):\n",
+        "    game = TicTacToe()\n",
+        "\n",
+        "    for episode in range(episodes):\n",
+        "        game.reset()\n",
+        "        state = agent.get_state(game)\n",
+        "\n",
+        "        while True:\n",
+        "            action = agent.choose_action(game)\n",
+        "            game.make_move(action[0], action[1], 1)\n",
+        "\n",
+        "            winner = game.is_game_over()\n",
+        "\n",
+        "            if winner is not None:\n",
+        "                reward = 1 if winner == 1 else 0\n",
+        "                agent.update(state, action, reward, agent.get_state(game))\n",
+        "                break\n",
+        "\n",
+        "            # random\n",
+        "            opp_move = random.choice(game.available_moves())\n",
+        "            game.make_move(opp_move[0], opp_move[1], -1)\n",
+        "\n",
+        "            winner = game.is_game_over()\n",
+        "\n",
+        "            next_state = agent.get_state(game)\n",
+        "\n",
+        "            if winner is not None:\n",
+        "                reward = -1 if winner == -1 else 0\n",
+        "                agent.update(state, action, reward, next_state)\n",
+        "                break\n",
+        "\n",
+        "            agent.update(state, action, 0, next_state)\n",
+        "            state = next_state\n"
+      ],
+      "metadata": {
+        "id": "JRxhf71sLsft"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "agent = QLearningAgent()\n",
+        "train(agent, episodes=10000)\n"
+      ],
+      "metadata": {
+        "id": "-ufQURD9LyOW"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "game = TicTacToe()\n",
+        "current_player = 1  # 1 = You (X) , -1 = AI (O)\n",
+        "\n",
+        "while True:\n",
+        "    game.print_board()\n",
+        "\n",
+        "    winner = game.is_game_over()\n",
+        "\n",
+        "    if winner is not None:\n",
+        "        if winner == 1:\n",
+        "            print(\"You Wins\")\n",
+        "        elif winner == -1:\n",
+        "            print(\"AI Wins\")\n",
+        "        else:\n",
+        "            print(\"Draw\")\n",
+        "        break\n",
+        "\n",
+        "    if current_player == 1:\n",
+        "        print(\"Your_turn\")\n",
+        "\n",
+        "        row = int(input(\"Row (1-2): \"))\n",
+        "        col = int(input(\"Col (1-2): \"))\n",
+        "\n",
+        "        valid = game.make_move(row, col, 1)\n",
+        "\n",
+        "        if not valid:\n",
+        "            print(\"Invalid move!\")\n",
+        "            continue\n",
+        "\n",
+        "    else:\n",
+        "        move = agent.choose_action(game)  # هنا الفرق\n",
+        "        print(\"AI move:\", move)\n",
+        "        game.make_move(move[0], move[1], -1)\n",
+        "\n",
+        "    current_player *= -1\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "wmJgqGMqMcdL",
+        "outputId": "b55f117f-6e0f-4182-9808-7071d8d07185"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            ". . .\n",
+            ". . .\n",
+            ". . .\n",
+            "\n",
+            "Draw\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
